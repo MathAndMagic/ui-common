@@ -1,0 +1,3 @@
+[submodule "phosphor-icons"]
+	path = phosphor-icons
+	url = git@github.com:phosphor-icons/web.git
