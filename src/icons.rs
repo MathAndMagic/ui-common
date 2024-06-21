@@ -90,7 +90,7 @@ use std::{
 use yew::{
     html::{ChildrenRenderer, IntoPropValue},
     virtual_dom::{VNode, VRaw},
-    AttrValue, Html, ToHtml,
+    AttrValue, Html,
 };
 
 #[derive(Clone, Copy, Ord, PartialOrd, Eq, Debug)]
@@ -101,7 +101,7 @@ impl Icon {
     /// Returns the `Html` of this icon.
     #[inline]
     pub const fn html(self) -> Html {
-        VNode::VRaw(VRaw {
+        Html::VRaw(VRaw {
             html: AttrValue::Static(self.0),
         })
     }
@@ -151,6 +151,13 @@ impl From<&Icon> for Html {
     }
 }
 
+impl IntoPropValue<Html> for Icon {
+    #[inline]
+    fn into_prop_value(self) -> Html {
+        self.html()
+    }
+}
+
 impl IntoPropValue<ChildrenRenderer<VNode>> for Icon {
     #[inline]
     fn into_prop_value(self) -> ChildrenRenderer<VNode> {
@@ -163,14 +170,6 @@ impl IntoPropValue<ChildrenRenderer<VNode>> for &Icon {
     #[inline(always)]
     fn into_prop_value(self) -> ChildrenRenderer<VNode> {
         (*self).into_prop_value()
-    }
-}
-
-impl ToHtml for Icon {
-    #[allow(clippy::inline_always)]
-    #[inline(always)]
-    fn to_html(&self) -> Html {
-        self.html()
     }
 }
 
@@ -310,11 +309,17 @@ impl IconFiles {
             fs::create_dir(&to)?;
         }
 
+        let name = if *variant == "Regular" {
+            "Phosphor".to_string()
+        } else {
+            format!("Phosphor-{}", variant)
+        };
+
         fs::write(to.join("style.css"), css)?;
-        fs::write(to.join(format!("Phosphor-{}.svg", variant)), svg)?;
-        fs::write(to.join(format!("Phosphor-{}.ttf", variant)), font_ttf)?;
-        fs::write(to.join(format!("Phosphor-{}.woff", variant)), font_woff)?;
-        fs::write(to.join(format!("Phosphor-{}.woff2", variant)), font_woff2)?;
+        fs::write(to.join(format!("{}.svg", name)), svg)?;
+        fs::write(to.join(format!("{}.ttf", name)), font_ttf)?;
+        fs::write(to.join(format!("{}.woff", name)), font_woff)?;
+        fs::write(to.join(format!("{}.woff2", name)), font_woff2)?;
         fs::write(to.join("LICENSE"), license)?;
 
         Ok(())

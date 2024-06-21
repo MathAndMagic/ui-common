@@ -10,9 +10,9 @@ pub enum Color {
     #[default]
     Primary,
     Secondary,
-    Success,
+    Dark,
     Danger,
-    Light,
+    Success,
 }
 
 impl Display for Color {
@@ -22,7 +22,7 @@ impl Display for Color {
             Color::Secondary => write!(f, "secondary"),
             Color::Success => write!(f, "success"),
             Color::Danger => write!(f, "danger"),
-            Color::Light => write!(f, "light"),
+            Color::Dark => write!(f, "dark"),
         }
     }
 }
@@ -32,6 +32,7 @@ pub enum Variant {
     #[default]
     Solid,
     Outline,
+    Transparent,
 }
 
 impl Display for Variant {
@@ -39,17 +40,34 @@ impl Display for Variant {
         match self {
             Variant::Solid => write!(f, "solid"),
             Variant::Outline => write!(f, "outline"),
+            Variant::Transparent => write!(f, "transparent"),
         }
     }
 }
 
 #[derive(Clone, Debug, PartialEq, Default)]
 pub enum Size {
-    ExtraSmall,
     Small,
     #[default]
     Medium,
     Large,
+    ExtraLarge,
+}
+
+#[derive(Clone, Debug, PartialEq, Default)]
+pub enum Rounded {
+    #[default]
+    Auto,
+    Full,
+}
+
+impl Display for Rounded {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Rounded::Auto => write!(f, "rounded-auto"),
+            Rounded::Full => write!(f, "rounded-full"),
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Properties)]
@@ -61,6 +79,8 @@ where
     pub color: Color,
     #[prop_or_default]
     pub variant: Variant,
+    #[prop_or_default]
+    pub rounded: Rounded,
     #[prop_or_default]
     pub to: Option<T>,
     #[prop_or(AttrValue::from("button"))]
@@ -96,17 +116,17 @@ where
     T: Target + 'static,
 {
     let padding_classes = match props.size {
-        Size::ExtraSmall => "px-2 py-1",
         Size::Small => "px-2 py-1",
         Size::Medium => "px-2.5 py-1.5",
         Size::Large => "px-3 py-2",
+        Size::ExtraLarge => "px-2 py-1",
     };
 
     let text_size_class = match props.size {
-        Size::ExtraSmall => "text-xs",
         Size::Small => "text-sm font-medium",
         Size::Medium => "text-sm font-medium",
         Size::Large => "text-sm font-medium",
+        Size::ExtraLarge => "text-xs",
     };
 
     let color_classes = match props.color {
@@ -114,7 +134,7 @@ where
         Color::Secondary => "bg-transparent border border-gray-high-950 dark:border-gray-low-300 hover:border-gray-high-700 dark:hover:border-gray-low-50 text-gray-low-500 dark:text-gray-high-950 hover:text-gray-low-50 dark:hover:text-gray-high-700",
         Color::Success => "text-white bg-success-500 hover:bg-success-600",
         Color::Danger => "text-white bg-danger-500 hover:bg-danger-600",
-        Color::Light => "text-gray-800 bg-gray-100 hover:bg-gray-200",
+        Color::Dark => "text-gray-800 bg-gray-100 hover:bg-gray-200",
     };
 
     let class = classes!(
@@ -137,16 +157,16 @@ where
                 class={classes!(class, "inline-block")}
                 to={ to.clone() }
             >
-                if let Some(icon) = &props.left_icon {
-                    { icon.clone() }
-                }
+                // if let Some(icon) = &props.left_icon {
+                //     { icon.clone() }
+                // }
 
                 { props.text.clone() }
                 { for props.children.iter() }
 
-                if let Some(icon) = &props.right_icon {
-                    { icon.clone() }
-                }
+                // if let Some(icon) = &props.right_icon {
+                //     { icon.clone() }
+                // }
             </Link<T>>
         };
     }
@@ -157,16 +177,16 @@ where
             type={ props.type_.clone() }
             onclick={props.onclick.clone()}
         >
-            if let Some(icon) = &props.left_icon {
-                { icon.clone() }
-            }
+            // if let Some(icon) = &props.left_icon {
+            //     { icon.clone() }
+            // }
 
             { props.text.clone() }
             { for props.children.iter() }
 
-            if let Some(icon) = &props.right_icon {
-                { icon.clone() }
-            }
+            // if let Some(icon) = &props.right_icon {
+            //     { icon.clone() }
+            // }
         </button>
     };
 }

@@ -1,0 +1,12 @@
+[package]
+name = "components"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ui-common = { path = "../../" }
+yew = { version = "0.21.0", features = ["csr"] }
+
+[[bin]]
+name = "copy_icons"
+path = "src/bin/copy_icons.rs"
