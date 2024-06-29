@@ -5,8 +5,25 @@ edition = "2021"
 
 [dependencies]
 ui-common = { path = "../../" }
+uuid = { version = "1.9.1", features = ["v4"] }
+wasm-bindgen = "0.2.92"
 yew = { version = "0.21.0", features = ["csr"] }
+yew-nested-router = "0.7.0"
 
 [[bin]]
-name = "copy_icons"
-path = "src/bin/copy_icons.rs"
+name = "copy_assets"
+path = "src/bin/copy_assets.rs"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Document",
+  "DomRect",
+  "DomTokenList",
+  "Element",
+  "Event",
+  "EventTarget",
+  "HtmlElement",
+  "MouseEvent",
+  "Window",
+]

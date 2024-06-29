@@ -108,6 +108,8 @@ fn main() -> Result<()> {
 
     phosphor_icons(&mut std::fs::File::create(icons_dest_path)?)
         .context("Failed to generate icons")?;
+
+    println!("cargo::rerun-if-changed=src");
     tailwind_css(&css_dest_path).context("Failed to generate css")?;
 
     Ok(())

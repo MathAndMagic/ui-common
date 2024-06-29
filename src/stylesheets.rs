@@ -2,8 +2,8 @@
 //!
 //! To use stylesheets, you should deal with its file. This file can be added by:
 //!
-//! 1. Using [`Stylesheet::copy()`](crate::Stylesheet::copy) - in build-executed code (recommended, see below)
-//! 2. Accessing the data via [`Stylesheet::*`] and delivering it yourself
+//! 1. Using [`Stylesheet::copy()`](crate::StylesheetFiles::copy) - in build-executed code (recommended, see below)
+//! 2. Accessing the data via [`StylesheetFiles::FILES`] and delivering it yourself
 //!
 //! # 1. Recommended - Automatically Copying Files
 //!
@@ -15,16 +15,16 @@
 //!
 //!    ```toml
 //!    [[bin]]
-//!    name = "copy-stylesheets"
+//!    name = "copy-assets"
 //!    ```
 //!
-//! 2. `src/bin/copy-stylesheets.rs`
+//! 2. `src/bin/copy-assets.rs`
 //!
 //!    Create the program to copy the files.
 //!
 //!    ```no_run
 //!    use std::path::PathBuf;
-//!    use ui_common::Stylesheet;
+//!    use ui_common::StylesheetFiles;
 //!
 //!    fn main() -> Result<(), std::io::Error> {
 //!        let path = PathBuf::from(
@@ -34,7 +34,7 @@
 //!            std::fs::create_dir(&path)?;
 //!        }
 //!
-//!        Stylesheet::copy_all(&path)
+//!        StylesheetFiles::copy(&path)
 //!    }
 //!    ```
 //!
@@ -58,42 +58,33 @@
 //!    [[hooks]]
 //!    stage = "build"
 //!    command = "cargo"
-//!    command_arguments = ["run", "--bin", "copy-stylesheets"]
+//!    command_arguments = ["run", "--bin", "copy-assets"]
 //!    ```
 //!
 
 use std::fs;
-pub struct Stylesheet {
-    pub file_name: &'static str,
-    pub content: &'static str,
+pub struct StylesheetFiles {
+    pub tailwind: &'static str,
 }
 
-impl Stylesheet {
-    pub const TAILWIND: Self = Self {
-        file_name: "tailwind.css",
-        content: include_str!(concat!(env!("OUT_DIR"), "/tailwind_generated.css")),
+impl StylesheetFiles {
+    pub const FILES: Self = Self {
+        tailwind: include_str!(concat!(env!("OUT_DIR"), "/tailwind_generated.css")),
     };
 
-    /// Copy stylesheet to the specified directory.
+    /// Copy stylesheets to the specified directory.
     ///
     /// # Errors
     ///
     /// Will return an error when there is a problem with writing the files or creating the directory.
-    pub fn copy(&self, to: &std::path::Path) -> Result<(), std::io::Error> {
+    pub fn copy(to: &std::path::Path) -> Result<(), std::io::Error> {
+        let StylesheetFiles { tailwind } = Self::FILES;
+
         let to = to.join("common");
         if !to.is_dir() {
             fs::create_dir(&to)?;
         }
 
-        fs::write(to.join(self.file_name), self.content)
-    }
-
-    /// Copy all stylesheets to the specified directory.
-    ///
-    /// # Errors
-    ///
-    /// Will return an error when there is a problem with writing the files or creating the directory.
-    pub fn copy_all(to: &std::path::Path) -> Result<(), std::io::Error> {
-        Stylesheet::TAILWIND.copy(to)
+        fs::write(to.join("tailwind.css"), tailwind)
     }
 }

@@ -1,5 +1,5 @@
 use std::path::PathBuf;
-use ui_common::IconFiles;
+use ui_common::{IconFiles, StylesheetFiles};
 
 fn main() -> Result<(), std::io::Error> {
     let path = PathBuf::from(
@@ -8,5 +8,8 @@ fn main() -> Result<(), std::io::Error> {
     if !path.is_dir() {
         std::fs::create_dir(&path)?;
     }
-    IconFiles::FILES.copy(&path)
+
+    IconFiles::FILES.copy(&path)?;
+    // IconFiles::FILES_FILL.copy(&path)?;
+    StylesheetFiles::copy(&path)
 }

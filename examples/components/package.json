@@ -1,0 +1,17 @@
+{
+  "name": "common-ui-example-components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:tailwind": "tailwindcss -i ./assets/stylesheets/application.css -o ./public/application.css",
+    "build": "pnpm run build:tailwind",
+    "watch": "pnpm run build:tailwind -- --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^3.4.3"
+  }
+}

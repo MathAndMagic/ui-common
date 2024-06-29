@@ -1,4 +1,4 @@
 [[hooks]]
 stage = "build"
 command = "cargo"
-command_arguments = ["run", "--bin", "copy_icons"]
+command_arguments = ["run", "--bin", "copy_assets"]
