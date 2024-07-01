@@ -73,9 +73,17 @@ pub fn input(props: &Props) -> Html {
     };
 
     let border_classes = match props.variant {
-        Variant::Standard => unimplemented!(),
-        Variant::Round => unimplemented!(),
-        Variant::Underline => "mm-rounded-none mm-border-b mm-border-b-transparent-black-400 dark:mm-border-b-transparent-white-400 focus:mm-border-b-transparent-black-800 dark:focus:mm-border-b-transparent-white-800",
+        Variant::Standard | Variant::Round => "mm-border mm-border-transparent-black-700 dark:mm-border-transparent-white-600 focus:mm-border-transparent-black-800 dark:focus:mm-border-transparent-white-800",
+        Variant::Underline => "mm-border-b mm-border-b-transparent-black-400 dark:mm-border-b-transparent-white-400 focus:mm-border-b-transparent-black-800 dark:focus:mm-border-b-transparent-white-800",
+    };
+
+    let border_radius_classes = match props.variant {
+        Variant::Standard => match props.size {
+            Size::Small | Size::Medium | Size::Large => "mm-rounded-md",
+            Size::ExtraLarge => "mm-rounded-lg",
+        },
+        Variant::Round => "mm-rounded-full",
+        Variant::Underline => "mm-rounded-none",
     };
 
     let class = classes!(
@@ -94,6 +102,7 @@ pub fn input(props: &Props) -> Html {
         "mm-outline-none",
         "mm-select-auto",
         border_classes,
+        border_radius_classes,
         padding_classes,
         text_size_classes,
         props.class.clone(),
