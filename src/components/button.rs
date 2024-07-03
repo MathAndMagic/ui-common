@@ -77,8 +77,8 @@ where
     pub children: Children,
 }
 
-#[function_component(Button)]
-pub fn button<T>(props: &Props<T>) -> Html
+#[function_component]
+pub fn Button<T>(props: &Props<T>) -> Html
 where
     T: Target + 'static,
 {

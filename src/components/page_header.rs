@@ -10,8 +10,8 @@ pub struct Props {
     pub buttons: Children,
 }
 
-#[function_component(PageHeader)]
-pub fn page_header(props: &Props) -> Html {
+#[function_component]
+pub fn PageHeader(props: &Props) -> Html {
     html! {
         <div class="mm-bg-gray-high-400 dark:mm-bg-gray-low-950 mm-py-6 mm-min-h-[100px] mm-border-b mm-border-b-gray-high-500 dark:mm-border-b-gray-low-800">
             <div class="mm-container mm-mx-auto mm-flex mm-px-6 mm-gap-x-4 sm:mm-gap-x-6 md:mm-gap-x-12 mm-h-full mm-items-center">

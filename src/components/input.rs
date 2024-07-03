@@ -42,8 +42,8 @@ pub struct Props {
     pub onkeyup: Callback<KeyboardEvent>,
 }
 
-#[function_component(Input)]
-pub fn input(props: &Props) -> Html {
+#[function_component]
+pub fn Input(props: &Props) -> Html {
     let padding_classes = match props.variant {
         Variant::Standard => match props.size {
             Size::Small => "mm-px-2 mm-py-0.5",

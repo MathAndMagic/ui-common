@@ -8,47 +8,35 @@ pub struct Props<T>
 where
     T: Target,
 {
-    /// The links to display in the header.
+    /// The links to display in the footer.
     #[prop_or_default]
     pub links: Vec<NavLink<T>>,
 
-    /// The logo to display in the header.
+    /// The copyright content to display.
     #[prop_or_default]
-    pub logo: Children,
-
-    /// Content for the right side of the header.
-    #[prop_or_default]
-    pub right: Children,
+    pub children: Children,
 }
 
-/// A header component with 3 slots: `logo`, `links`, and `right`.
+/// A footer component with 2 slots: `copyright` and `links`.
 #[function_component]
-pub fn Header<T>(props: &Props<T>) -> Html
+pub fn Footer<T>(props: &Props<T>) -> Html
 where
     T: Target + Default + 'static,
 {
     html! {
-        <header class="mm-bg-gray-high-400 dark:mm-bg-gray-low-950 dark:mm-border-b-gray-transparent-white-400 mm-border-b-transparent-black-400 mm-border-b-[0.5px] mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-h-[52px]">
-            <div class="mm-container mm-mx-auto mm-flex mm-px-6 mm-gap-x-4 sm:mm-gap-x-6 md:mm-gap-x-12 mm-h-full">
-                <div class="mm-flex-none">
-                    <div class="mm-h-full mm-flex mm-items-center">
-                        <Link<T> to={T::default()} class="mm-block mm-h-full mm-flex mm-items-center">
-                            { for props.logo.iter() }
-                        </Link<T>>
-                    </div>
-                </div>
-                <div class="mm-flex-grow">
-                    if !props.links.is_empty() {
+        <footer class="mm-bg-gray-high-400 dark:mm-bg-gray-low-950 mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-text-sm mm-p-6 mm-mt-auto">
+            <div class="mm-container mm-mx-auto mm-flex mm-justify-between mm-gap-y-6">
+                if !props.links.is_empty() {
+                    <div class="mm-flex-none md:mm-position-2">
                         <NavLinks<T> links={props.links.clone()} />
-                    }
-                </div>
-                <div class="mm-flex-none">
-                    <div class="mm-flex mm-gap-x-2 sm:mm-gap-x-4 md:mm-gap-x-8 mm-h-full mm-items-center">
-                        { for props.right.iter() }
                     </div>
+                }
+
+                <div class="mm-flex-1 md:mm-position-1">
+                    { for props.children.iter() }
                 </div>
             </div>
-        </header>
+        </footer>
     }
 }
 

@@ -86,8 +86,8 @@ where
     pub router: Option<RowRouter<I, T>>,
 }
 
-#[function_component(Table)]
-pub fn table<I, T>(props: &Props<I, T>) -> Html
+#[function_component]
+pub fn Table<I, T>(props: &Props<I, T>) -> Html
 where
     I: Clone + PartialEq,
     T: Target,

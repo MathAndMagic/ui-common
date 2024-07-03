@@ -17,8 +17,8 @@ pub enum Route {
     Magic,
 }
 
-#[function_component(App)]
-fn app() -> Html {
+#[function_component]
+fn App() -> Html {
     html! {
         <Router<Route>>
             <Header<Route> logo={
@@ -29,13 +29,13 @@ fn app() -> Html {
                     </svg>
                 }
             } links={vec![
-                HeaderNavLink {
+                NavLink {
                     icon: Some(Icon::MATH_OPERATIONS),
                     to: Route::Math,
                     text: "Math".to_string(),
                     predicate: None,
                 },
-                HeaderNavLink {
+                NavLink {
                     icon: Some(Icon::MAGIC_WAND),
                     to: Route::Magic,
                     text: "Magic".to_string(),
@@ -44,8 +44,8 @@ fn app() -> Html {
             ]} right={
                 html! {
                     <>
-                        <Button<Route> color={ButtonColor::Blind} variant={ButtonVariant::Transparent} round={ButtonRounded::Full} left_icon={Icon::MAGNIFYING_GLASS} />
-                        <Button<Route> color={ButtonColor::Blind} variant={ButtonVariant::Transparent} round={ButtonRounded::Full} left_icon={Icon::SUN} />
+                        <Button<Route> color={ButtonColor::Blind} variant={ButtonVariant::Transparent} round={ButtonRound::Full} left_icon={Icon::MAGNIFYING_GLASS} />
+                        <Button<Route> color={ButtonColor::Blind} variant={ButtonVariant::Transparent} round={ButtonRound::Full} left_icon={Icon::SUN} />
                         <Avatar<Route> name="Rinat Shay." variant={AvatarVariant::Letter} />
                     </>
                 }
@@ -68,63 +68,63 @@ fn main() {
     yew::Renderer::<App>::new().render();
 }
 
-#[function_component(PageContent)]
-fn page_content() -> Html {
+#[function_component]
+fn PageContent() -> Html {
     let dropdown_id = format!("dropdown-{}", Uuid::new_v4());
     // let router = use_router().expect("no router found");
 
-    let menu_open = {
-        let dropdown_id = dropdown_id.clone();
+    // let menu_open = {
+    //     let dropdown_id = dropdown_id.clone();
 
-        use_callback(dropdown_id, |e: MouseEvent, dropdown_id| {
-            e.prevent_default();
-            e.stop_propagation();
+    //     use_callback(dropdown_id, |e: MouseEvent, dropdown_id| {
+    //         e.prevent_default();
+    //         e.stop_propagation();
 
-            let document = web_sys::window()
-                .expect("no window found")
-                .document()
-                .expect("no document found");
+    //         let document = web_sys::window()
+    //             .expect("no window found")
+    //             .document()
+    //             .expect("no document found");
 
-            // Remove all dropdowns
-            let dropdowns = document.query_selector_all("[data-dropdown=true]").unwrap();
-            for i in 0..dropdowns.length() {
-                let dd = dropdowns.get(i).unwrap().dyn_into::<HtmlElement>().unwrap();
-                dd.remove();
-            }
+    //         // Remove all dropdowns
+    //         let dropdowns = document.query_selector_all("[data-dropdown=true]").unwrap();
+    //         for i in 0..dropdowns.length() {
+    //             let dd = dropdowns.get(i).unwrap().dyn_into::<HtmlElement>().unwrap();
+    //             dd.remove();
+    //         }
 
-            // Create dropdown element and append it to the body
-            let dd = document.create_element("div").unwrap();
-            dd.set_attribute("data-dropdown", "true").unwrap();
-            dd.set_inner_html(&dropdown(&DropdownProps {
-                id: dropdown_id.clone(),
-            }));
-            document.body().unwrap().append_child(&dd).unwrap();
+    //         // Create dropdown element and append it to the body
+    //         let dd = document.create_element("div").unwrap();
+    //         dd.set_attribute("data-dropdown", "true").unwrap();
+    //         dd.set_inner_html(&dropdown(&DropdownProps {
+    //             id: dropdown_id.clone(),
+    //         }));
+    //         document.body().unwrap().append_child(&dd).unwrap();
 
-            let rect = e
-                .target()
-                .expect("mouse event doesn't have a target")
-                .dyn_into::<HtmlElement>()
-                .expect("event target should be of type HtmlElement")
-                .closest("button")
-                .expect("no button found")
-                .expect("no button found")
-                .get_bounding_client_rect();
+    //         let rect = e
+    //             .target()
+    //             .expect("mouse event doesn't have a target")
+    //             .dyn_into::<HtmlElement>()
+    //             .expect("event target should be of type HtmlElement")
+    //             .closest("button")
+    //             .expect("no button found")
+    //             .expect("no button found")
+    //             .get_bounding_client_rect();
 
-            // Position the dropdown
-            let dd = document.get_element_by_id(&dropdown_id).unwrap();
-            let dropdown_width = 240.0;
+    //         // Position the dropdown
+    //         let dd = document.get_element_by_id(&dropdown_id).unwrap();
+    //         let dropdown_width = 240.0;
 
-            dd.set_attribute(
-                "style",
-                &format!(
-                    "top: {}px; left: {}px",
-                    rect.bottom() + 4.0,
-                    rect.right() - dropdown_width,
-                ),
-            )
-            .expect("failed to set style");
-        })
-    };
+    //         dd.set_attribute(
+    //             "style",
+    //             &format!(
+    //                 "top: {}px; left: {}px",
+    //                 rect.bottom() + 4.0,
+    //                 rect.right() - dropdown_width,
+    //             ),
+    //         )
+    //         .expect("failed to set style");
+    //     })
+    // };
 
     // let menu_close = {
     //     let dropdown_id = dropdown_id.clone();
@@ -146,33 +146,33 @@ fn page_content() -> Html {
     let columns = vec![
         TableColumn {
             title: Some("Title".to_string()),
-            cell: TableCellRenderer::new(|item: &String| html! { { item.clone() } }),
+            cell: TableCellRenderer::new(|item: &String| html! { { (*item).clone() } }),
         },
         TableColumn {
             title: Some("Status".to_string()),
-            cell: TableCellRenderer::new(|item: &String| html! { { item.clone() } }),
+            cell: TableCellRenderer::new(|item: &String| html! { { (*item).clone() } }),
         },
         TableColumn {
             title: Some("Region".to_string()),
-            cell: TableCellRenderer::new(|item: &String| html! { { item.clone() } }),
+            cell: TableCellRenderer::new(|item: &String| html! { { (*item).clone() } }),
         },
         TableColumn {
             title: Some("Language".to_string()),
-            cell: TableCellRenderer::new(|item: &String| html! { { item.clone() } }),
+            cell: TableCellRenderer::new(|item: &String| html! { { (*item).clone() } }),
         },
         TableColumn {
             title: Some("Style".to_string()),
-            cell: TableCellRenderer::new(|item: &String| html! { { item.clone() } }),
+            cell: TableCellRenderer::new(|item: &String| html! { { (*item).clone() } }),
         },
         TableColumn {
             title: Some("Updated".to_string()),
-            cell: TableCellRenderer::new(|item: &String| html! { { item.clone() } }),
+            cell: TableCellRenderer::new(|item: &String| html! { { (*item).clone() } }),
         },
         TableColumn {
             title: None,
             cell: TableCellRenderer::new(move |_| {
                 html! {
-                    <Button<Route> onclick={menu_open.clone()} left_icon={Some(Icon::DOTS_THREE_VERTICAL)} color={ButtonColor::Blind} variant={ButtonVariant::Transparent} />
+                    <Button<Route> left_icon={Some(Icon::DOTS_THREE_VERTICAL)} color={ButtonColor::Blind} variant={ButtonVariant::Transparent} />
                 }
             }),
         },

@@ -55,8 +55,8 @@ where
     pub class: Classes,
 }
 
-#[function_component(Avatar)]
-pub fn avatar<T>(props: &Props<T>) -> Html
+#[function_component]
+pub fn Avatar<T>(props: &Props<T>) -> Html
 where
     T: Target + 'static,
 {
@@ -139,8 +139,8 @@ where
     }
 }
 
-#[function_component(AvatarContent)]
-fn avatar_content(props: &AvatarContentProps) -> Html {
+#[function_component]
+fn AvatarContent(props: &AvatarContentProps) -> Html {
     html! {
         if props.variant == Variant::Icon {
             <span class="mm-w-5 mm-min-h-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ props.icon.clone() }</span>
