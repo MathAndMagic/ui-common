@@ -43,7 +43,7 @@ where
                     }
                 </div>
                 <div class="mm-flex-none">
-                    <div class="mm-flex mm-gap-x-2 sm:mm-gap-x-4 md:mm-gap-x-8 mm-h-full mm-items-center">
+                    <div class="mm-flex mm-gap-x-6 md:mm-gap-x-8 mm-h-full mm-items-center">
                         { for props.right.iter() }
                     </div>
                 </div>

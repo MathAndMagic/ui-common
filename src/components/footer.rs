@@ -24,10 +24,10 @@ where
     T: Target + Default + 'static,
 {
     html! {
-        <footer class="mm-bg-gray-high-400 dark:mm-bg-gray-low-950 mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-text-sm mm-p-6 mm-mt-auto">
-            <div class="mm-container mm-mx-auto mm-flex mm-justify-between mm-px-6 mm-gap-y-6">
+        <footer class="mm-bg-gray-high-400 dark:mm-bg-gray-low-950 mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-text-sm mm-py-6 mm-mt-auto">
+            <div class="mm-container mm-mx-auto mm-grid md:mm-flex md:mm-flex-row mm-justify-between mm-gap-y-6 mm-px-6">
                 if !props.links.is_empty() {
-                    <div class="mm-flex-none md:mm-order-2">
+                    <div class="mm-flex-none mm-shrink-0 md:mm-order-2">
                         <NavLinks<T> links={props.links.clone()} />
                     </div>
                 }
@@ -59,12 +59,12 @@ where
             if let Some(route) = &link.route {
                 <Link<T>
                     to={route.clone()}
-                    class="mm-text-sm mm-inline-block mm-h-full mm-flex mm-items-center mm-gap-2 mm-justify-center mm-transition-colors mm-duration-125 mm-font-medium"
+                    class="mm-text-sm mm-inline-block mm-h-full mm-flex mm-items-center mm-gap-2 mm-transition-colors mm-duration-125 mm-font-medium"
                     active="mm-text-gray-low-800 dark:mm-text-gray-high-200"
                     inactive="mm-text-gray-low-100 hover:mm-text-gray-low-400 dark:mm-text-gray-low-200 dark:hover:mm-text-gray-high-700"
                 >
                     if let Some(icon) = link.icon {
-                        <span class="mm-w-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ icon }</span>
+                        <span class="mm-w-5 mm-inline-block mm-items-center mm-flex mm-text-xl">{ icon }</span>
                     }
 
                     { link.text.to_string() }
@@ -72,10 +72,10 @@ where
             } else {
                 <a
                     href={link.href.clone()}
-                    class="mm-text-sm mm-inline-block mm-h-full mm-flex mm-items-center mm-gap-2 mm-justify-center mm-transition-colors mm-duration-125 mm-font-medium mm-text-gray-low-100 hover:mm-text-gray-low-400 dark:mm-text-gray-low-200 dark:hover:mm-text-gray-high-700"
+                    class="mm-text-sm mm-inline-block mm-h-full mm-flex mm-items-center mm-gap-2 mm-transition-colors mm-duration-125 mm-font-medium mm-text-gray-low-100 hover:mm-text-gray-low-400 dark:mm-text-gray-low-200 dark:hover:mm-text-gray-high-700"
                 >
                     if let Some(icon) = link.icon {
-                        <span class="mm-w-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ icon }</span>
+                        <span class="mm-w-5 mm-inline-block mm-items-center mm-flex mm-text-xl">{ icon }</span>
                     }
 
                     { link.text.to_string() }
@@ -85,7 +85,7 @@ where
     }).collect::<Html>();
 
     html! {
-        <ul class="mm-flex mm-items-stretch mm-gap-6">
+        <ul class="mm-flex mm-flex-col md:mm-flex-row mm-items-stretch mm-gap-x-6 mm-gap-y-2">
             { links }
         </ul>
     }
