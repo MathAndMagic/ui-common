@@ -66,24 +66,39 @@ fn NavLinks<T>(props: &NavLinksProps<T>) -> Html
 where
     T: Target,
 {
+    let links = props.links.iter().map(|link| html! {
+        <li class="mm-h-full">
+            if let Some(route) = &link.route {
+                <Link<T>
+                    to={route.clone()}
+                    class="mm-text-sm mm-inline-block mm-h-full mm-flex mm-items-center mm-gap-2 mm-justify-center mm-transition-colors mm-duration-125 mm-font-medium"
+                    active="mm-text-gray-low-800 dark:mm-text-gray-high-200"
+                    inactive="mm-text-gray-low-100 hover:mm-text-gray-low-400 dark:mm-text-gray-low-200 dark:hover:mm-text-gray-high-700"
+                >
+                    if let Some(icon) = link.icon {
+                        <span class="mm-w-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ icon }</span>
+                    }
+
+                    { link.text.to_string() }
+                </Link<T>>
+            } else {
+                <a
+                    href={link.href.clone()}
+                    class="mm-text-sm mm-inline-block mm-h-full mm-flex mm-items-center mm-gap-2 mm-justify-center mm-transition-colors mm-duration-125 mm-font-medium mm-text-gray-low-100 hover:mm-text-gray-low-400 dark:mm-text-gray-low-200 dark:hover:mm-text-gray-high-700"
+                >
+                    if let Some(icon) = link.icon {
+                        <span class="mm-w-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ icon }</span>
+                    }
+
+                    { link.text.to_string() }
+                </a>
+            }
+        </li>
+    }).collect::<Html>();
+
     html! {
         <ul class="mm-flex mm-items-stretch mm-gap-1">
-            { for props.links.iter().map(|link| html! {
-                <li class="mm-h-full">
-                    <Link<T>
-                        to={link.to.clone()}
-                        class="mm-text-sm mm-inline-block mm-h-full mm-flex mm-items-center mm-gap-2 mm-justify-center mm-transition-colors mm-duration-125 mm-font-medium mm-p-4"
-                        active="mm-text-gray-low-800 dark:mm-text-gray-high-200"
-                        inactive="mm-text-gray-low-100 hover:mm-text-gray-low-400 dark:mm-text-gray-low-200 dark:hover:mm-text-gray-high-700"
-                    >
-                        if let Some(icon) = link.icon {
-                            <span class="mm-w-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ icon }</span>
-                        }
-
-                        { link.text.to_string() }
-                    </Link<T>>
-                </li>
-            }) }
+            { links }
         </ul>
     }
 }

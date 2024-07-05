@@ -21,6 +21,14 @@ pub enum Variant {
     Image,
 }
 
+/// Possible connection status.
+#[derive(Clone, Debug, PartialEq)]
+pub enum ConnectionStatus {
+    Connecting,
+    Open,
+    Closed,
+}
+
 #[derive(PartialEq, Properties)]
 pub struct Props<T>
 where
@@ -49,6 +57,10 @@ where
     /// Click event handler.
     #[prop_or_default]
     pub onclick: Callback<MouseEvent>,
+
+    /// Websocket connection status.
+    #[prop_or_default]
+    pub connection_status: Option<ConnectionStatus>,
 
     /// List of classes to apply.
     #[prop_or_default]
@@ -86,8 +98,23 @@ where
         "mm-ease-in-out",
         "mm-items-center",
         "mm-justify-center",
+        "mm-relative",
         props.class.clone(),
     );
+
+    // TODO: sizing only implemented for the default (`Medium`) variant. Implement for others.
+    let connection_status = match props.connection_status {
+        Some(ConnectionStatus::Connecting) => html! {
+            <span class="mm-absolute mm-w-[7px] mm-h-[7px] mm-bg-amber-600 dark:mm-bg-amber-500 mm-rounded-full mm-bottom-px mm-right-px mm-border-[0.5px] mm-border-black-800 dark:mm-border-white-800 mm-animate-ping"></span>
+        },
+        Some(ConnectionStatus::Open) => html! {
+            <span class="mm-absolute mm-w-[7px] mm-h-[7px] mm-bg-green-700 mm-rounded-full mm-bottom-px mm-right-px mm-border-[0.5px] mm-border-black-800 dark:mm-border-white-800"></span>
+        },
+        Some(ConnectionStatus::Closed) => html! {
+            <span class="mm-absolute mm-w-[7px] mm-h-[7px] mm-bg-gray-high-900 dark:mm-bg-gray-low-400 mm-rounded-full mm-bottom-px mm-right-px mm-border-[0.5px] mm-border-black-800 dark:mm-border-white-800"></span>
+        },
+        None => html! {},
+    };
 
     if let Some(to) = &props.to {
         return html! {
@@ -96,6 +123,7 @@ where
                 to={ to.clone() }
             >
                 <AvatarContent ..props.into() />
+                { connection_status }
             </Link<T>>
         };
     }
@@ -107,6 +135,7 @@ where
             onclick={props.onclick.clone()}
         >
             <AvatarContent ..props.into() />
+            { connection_status }
         </button>
     };
 }

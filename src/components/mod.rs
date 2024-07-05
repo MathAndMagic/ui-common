@@ -8,7 +8,10 @@ mod nav_link;
 mod page_header;
 mod table;
 
-pub use avatar::{Avatar, Size as AvatarSize, Variant as AvatarVariant};
+pub use avatar::{
+    Avatar, ConnectionStatus as AvatarConnectionStatus, Size as AvatarSize,
+    Variant as AvatarVariant,
+};
 pub use button::{
     Button, Color as ButtonColor, Round as ButtonRound, Size as ButtonSize,
     Variant as ButtonVariant,

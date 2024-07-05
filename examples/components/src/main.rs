@@ -31,15 +31,15 @@ fn App() -> Html {
             } links={vec![
                 NavLink {
                     icon: Some(Icon::MATH_OPERATIONS),
-                    to: Route::Math,
+                    route: Some(Route::Math),
                     text: "Math".to_string(),
-                    predicate: None,
+                    ..Default::default()
                 },
                 NavLink {
                     icon: Some(Icon::MAGIC_WAND),
-                    to: Route::Magic,
+                    route: Some(Route::Magic),
                     text: "Magic".to_string(),
-                    predicate: None,
+                    ..Default::default()
                 },
             ]} right={
                 html! {
