@@ -84,12 +84,12 @@ fn phosphor_icons<W: Write>(output: &mut W) -> Result<()> {
 
 fn tailwind_css(path: &Path) -> Result<()> {
     Command::new("pnpm")
-        .args(&["install"])
+        .args(["install"])
         .status()
         .context("Failed to run `pnpm install`")?;
 
     let status = Command::new("pnpm")
-        .args(&[
+        .args([
             "tailwindcss",
             "-i",
             "./assets/stylesheets/application.css",

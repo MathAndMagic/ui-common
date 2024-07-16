@@ -1,7 +1,5 @@
 use ui_common::components::Header;
 use uuid::Uuid;
-use wasm_bindgen::JsCast;
-use web_sys::HtmlElement;
 use yew::prelude::*;
 
 use ui_common::{components::*, Icon};

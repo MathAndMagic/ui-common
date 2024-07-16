@@ -162,7 +162,7 @@ where
     fn from(props: &Props<T>) -> Self {
         AvatarContentProps {
             variant: props.variant.clone(),
-            icon: props.icon.clone(),
+            icon: props.icon,
             name: props.name.clone(),
         }
     }
@@ -172,7 +172,7 @@ where
 fn AvatarContent(props: &AvatarContentProps) -> Html {
     html! {
         if props.variant == Variant::Icon {
-            <span class="mm-w-5 mm-min-h-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ props.icon.clone() }</span>
+            <span class="mm-w-5 mm-min-h-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ props.icon }</span>
         } else if props.variant == Variant::Letter {
             <span class="mm-text-sm mm-uppercase">{ props.name.clone().chars().next().unwrap_or_default().to_string() }</span>
         } else if props.variant == Variant::Image {

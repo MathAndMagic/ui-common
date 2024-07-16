@@ -4,17 +4,17 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.83"
+anyhow = "1.0.86"
 chrono = { version = "0.4.38", features = ["serde", "wasmbind"] }
 gloo-net = "0.5.0"
 gloo-utils = "0.2.0"
 js-sys = "0.3.69"
-lazy_static = "1.4.0"
-serde = { version = "1.0.201", features = ["derive"] }
-serde_json = "1.0.117"
+lazy_static = "1.5.0"
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.120"
 thread_local = "1.1.8"
-url = "2.5.0"
-uuid = { version = "1.9.1", features = ["v4"] }
+url = "2.5.2"
+uuid = { version = "1.10.0", features = ["v4"] }
 wasm-bindgen = "0.2.92"
 wasm-bindgen-futures = "0.4.42"
 yew = { version = "0.21.0", features = ["csr"] }
@@ -34,11 +34,11 @@ features = [
 ]
 
 [build-dependencies]
-anyhow = "1.0.83"
+anyhow = "1.0.86"
 convert_case = "0.6.0"
-dotenv = "0.15.0"
-serde = { version = "1.0.201", features = ["derive"] }
-serde_json = "1.0.117"
+dotenvy = "0.15.7"
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.120"
 
 [[example]]
 name = "components"

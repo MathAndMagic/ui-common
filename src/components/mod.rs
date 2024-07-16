@@ -14,7 +14,7 @@ pub use avatar::{
 };
 pub use button::{
     Button, Color as ButtonColor, Round as ButtonRound, Size as ButtonSize,
-    Variant as ButtonVariant,
+    Variant as ButtonVariant, Width as ButtonWidth,
 };
 pub use footer::Footer;
 pub use header::Header;

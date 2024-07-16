@@ -38,6 +38,13 @@ pub enum Round {
     Full,
 }
 
+#[derive(Clone, Debug, PartialEq, Default)]
+pub enum Width {
+    #[default]
+    Auto,
+    Full,
+}
+
 #[derive(Clone, Debug, PartialEq, Properties)]
 pub struct Props<T>
 where
@@ -49,12 +56,16 @@ where
     pub variant: Variant,
     #[prop_or_default]
     pub round: Round,
+
     #[prop_or_default]
     pub to: Option<T>,
+
     #[prop_or(AttrValue::from("button"))]
     pub _type: AttrValue,
     #[prop_or_default]
     pub size: Size,
+    #[prop_or_default]
+    pub width: Width,
     #[prop_or_default]
     pub left_icon: Option<Icon>,
     #[prop_or_default]
@@ -82,61 +93,68 @@ pub fn Button<T>(props: &Props<T>) -> Html
 where
     T: Target + 'static,
 {
-    let padding_classes = match (props.left_icon, &props.text, props.right_icon) {
-        (None, _, None) => match props.size {
-            Size::ExtraSmall => "mm-px-3 mm-py-0.5",
-            Size::Small => "mm-px-3 mm-py-1",
-            Size::Medium => "mm-px-3.5 mm-py-1.5",
-            Size::Large => "mm-px-4 mm-py-2",
-            Size::ExtraLarge => "mm-px-6 mm-py-3",
-        },
-        (Some(_), Some(_), None) => match props.size {
-            Size::ExtraSmall => "mm-pl-0.5 mm-pr-2 mm-py-0.5",
-            Size::Small => "mm-pl-1.5 mm-pr-2.5 mm-py-1",
-            Size::Medium => "mm-pl-2 mm-pr-3 mm-py-1.5",
-            Size::Large => "mm-pl-2.5 mm-pr-3.5 mm-py-2",
-            Size::ExtraLarge => "mm-pl-3.5 mm-pr-5 mm-p-3",
-        },
-        (None, Some(_), Some(_)) => match props.size {
-            Size::ExtraSmall => "mm-pl-2 mm-pr-0.5 mm-py-0.5",
-            Size::Small => "mm-pl-2.5 mm-pr-1.5 mm-py-1",
-            Size::Medium => "mm-pl-3 mm-pr-1.5 mm-py-1.5",
-            Size::Large => "mm-pl-3.5 mm-pr-2 mm-py-2",
-            Size::ExtraLarge => "mm-pl-5 mm-pr-3.5 mm-p-3",
-        },
-        (Some(_), None, None) => match props.size {
-            Size::ExtraSmall => "mm-p-0.5",
-            Size::Small => "mm-p-1",
+    let has_content = props.text.is_some() || !props.children.is_empty();
+
+    let padding_classes = match (props.left_icon, has_content, props.right_icon) {
+        (Some(_), false, None) => match props.size {
+            // Only icon
+            Size::ExtraSmall => "mm-p-1",
+            Size::Small => "mm-p-1.5",
             Size::Medium => "mm-p-1.5",
             Size::Large => "mm-p-2",
-            Size::ExtraLarge => "mm-p-3.5",
+            Size::ExtraLarge => "mm-p-3",
+        },
+        (Some(_), true, None) => match props.size {
+            // Icon and text
+            Size::ExtraSmall => "mm-pl-1.5 mm-pr-2.5 mm-py-1",
+            Size::Small => "mm-pl-2 mm-pr-3 mm-py-1.5",
+            Size::Medium => "mm-pl-2 mm-pr-3 mm-py-1.5",
+            Size::Large => "mm-pl-2.5 mm-pr-3.5 mm-py-2",
+            Size::ExtraLarge => "mm-pl-3.5 mm-pr-5 mm-py-3",
+        },
+        (None, true, Some(_)) => match props.size {
+            // Text and icon
+            Size::ExtraSmall => "mm-pr-1.5 mm-pl-2.5 mm-py-1",
+            Size::Small => "mm-pr-2 mm-pl-3 mm-py-1.5",
+            Size::Medium => "mm-pr-2 mm-pl-3 mm-py-1.5",
+            Size::Large => "mm-pr-2.5 mm-pl-3.5 mm-py-2",
+            Size::ExtraLarge => "mm-pr-3.5 mm-pl-5 mm-py-3",
+        },
+        (None, true, None) => match props.size {
+            // Only text
+            Size::ExtraSmall => "mm-px-2.5 mm-py-1",
+            Size::Small => "mm-px-3 mm-py-1.5",
+            Size::Medium => "mm-px-3 mm-py-1.5",
+            Size::Large => "mm-px-3.5 mm-py-2",
+            Size::ExtraLarge => "mm-px-5 mm-py-3",
         },
         _ => unreachable!("unexpected combination of left_icon, text, and right_icon"),
     };
 
     let text_size_class = match props.size {
         Size::ExtraSmall => "mm-text-xs",
-        Size::Small => "mm-text-sm mm-font-medium",
-        Size::Medium => "mm-text-sm mm-font-medium",
-        Size::Large => "mm-text-sm mm-font-medium",
-        Size::ExtraLarge => "mm-text-md mm-font-medium",
+        Size::Small => "mm-text-sm",
+        Size::Medium => "mm-text-sm",
+        Size::Large => "mm-text-sm",
+        Size::ExtraLarge => "mm-text-md",
     };
 
     // TODO: match props.variant for each color
     let color_classes = match props.color {
         Color::Primary => match props.variant {
-            Variant::Solid => "mm-text-white mm-bg-primary-700 hover:mm-bg-primary-600 mm-border mm-border-transparent disabled:mm-opacity-30 disabled:hover:mm-bg-primary-700",
-            Variant::Outline => "mm-bg-transparent hover:mm-bg-transparent-black-300 dark:hover:mm-bg-transparent-white-200 disabled:mm-opacity-30 mm-text-primary-700 dark:mm-text-primary-500 mm-border mm-border-primary-700 dark:mm-border-primary-500",
-            _ => "mm-text-primary-700 mm-bg-transparent mm-border mm-border-primary-700 hover:mm-bg-primary-700 mm-text-white",
+            Variant::Solid => "mm-text-white mm-bg-primary-700 hover:mm-bg-primary-600 disabled:mm-opacity-30 disabled:hover:mm-bg-primary-700",
+            Variant::Transparent => "mm-text-primary-700 mm-bg-transparent mm-border mm-border-primary-700 hover:mm-bg-primary-700 mm-text-white mm-box-border",
+            Variant::Outline => "mm-bg-transparent hover:mm-bg-transparent-black-300 dark:hover:mm-bg-transparent-white-200 disabled:mm-opacity-30 mm-text-primary-700 dark:mm-text-primary-500 mm-border mm-border-primary-700 dark:mm-border-primary-500 mm-box-border",
         }
         Color::Secondary => match props.variant {
-            Variant::Solid => "mm-bg-transparent-black-300 dark:mm-bg-transparent-white-300 hover:mm-bg-transparent-black-400 dark:hover:mm-bg-transparent-white-400 disabled:mm-opacity-30 disabled:mm-bg-transparent-black-300 disabled:dark:mm-bg-transparent-white-300 mm-text-gray-low-800 dark:mm-text-gray-high-200 mm-border mm-border-transparent",
-            _ => "mm-bg-transparent mm-border mm-border-gray-high-950 dark:mm-border-gray-low-300 hover:mm-border-gray-high-700 dark:hover:mm-border-gray-low-50 mm-text-gray-low-500 dark:mm-text-gray-high-950 hover:mm-text-gray-low-50 dark:hover:mm-text-gray-high-700",
+            Variant::Solid => "mm-bg-transparent-black-300 dark:mm-bg-transparent-white-300 hover:mm-bg-transparent-black-400 dark:hover:mm-bg-transparent-white-400 disabled:mm-opacity-30 disabled:mm-bg-transparent-black-300 disabled:dark:mm-bg-transparent-white-300 mm-text-gray-low-800 dark:mm-text-gray-high-200",
+            Variant::Transparent => "mm-bg-transparent hover:mm-bg-transparent-black-300 dark:hover:mm-bg-transparent-white-200 disabled:mm-opacity-30 mm-text-gray-low-100 dark:mm-text-gray-low-200 hover:mm-text-gray-low-400 dark:hover:mm-text-gray-high-700",
+            Variant::Outline => "mm-bg-transparent mm-border mm-border-gray-high-950 dark:mm-border-gray-low-300 hover:mm-border-gray-high-700 dark:hover:mm-border-gray-low-50 mm-text-gray-low-500 dark:mm-text-gray-high-950 hover:mm-text-gray-low-50 dark:hover:mm-text-gray-high-700 mm-box-border",
         }
         Color::Blind => match props.variant {
-            Variant::Solid => "mm-bg-transparent-black-300 dark:mm-bg-transparent-white-300 hover:mm-bg-transparent-black-400 dark:hover:mm-bg-transparent-white-400 disabled:mm-opacity-30 mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-border mm-border-transparent",
-            Variant::Outline => "mm-bg-transparent hover:mm-bg-transparent-black-300 dark:hover:mm-bg-transparent-white-200 disabled:mm-opacity-30 mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-border mm-border-gray-high-800 dark:mm-border-gray-low-300",
-            Variant::Transparent => "mm-bg-transparent hover:mm-bg-transparent-black-300 dark:hover:mm-bg-transparent-white-200 disabled:mm-opacity-30 mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-border mm-border-transparent",
+            Variant::Solid => "mm-bg-transparent-black-300 dark:mm-bg-transparent-white-300 hover:mm-bg-transparent-black-400 dark:hover:mm-bg-transparent-white-400 disabled:mm-opacity-30 mm-text-gray-low-100 dark:mm-text-gray-low-200",
+            Variant::Outline => "mm-bg-transparent hover:mm-bg-transparent-black-300 dark:hover:mm-bg-transparent-white-200 disabled:mm-opacity-30 mm-text-gray-low-100 dark:mm-text-gray-low-200 mm-border mm-border-gray-high-800 dark:mm-border-gray-low-300 mm-box-border",
+            Variant::Transparent => "mm-bg-transparent hover:mm-bg-transparent-black-300 dark:hover:mm-bg-transparent-white-200 disabled:mm-opacity-30 mm-text-gray-low-100 dark:mm-text-gray-low-200",
         },
         Color::Success => "mm-text-white mm-bg-success-500 hover:mm-bg-success-600",
         Color::Danger => "mm-text-white mm-bg-danger-500 hover:mm-bg-danger-600",
@@ -153,6 +171,11 @@ where
         Round::Full => "mm-rounded-full",
     };
 
+    let width_class = match props.width {
+        Width::Auto => "mm-w-auto",
+        Width::Full => "mm-w-full",
+    };
+
     let class = classes!(
         color_classes,
         "mm-duration-125",
@@ -162,10 +185,27 @@ where
         padding_classes,
         text_size_class,
         rounded_class,
+        width_class,
         "mm-transition-colors",
         "mm-items-center",
         "mm-outline-none",
         props.class.clone(),
+    );
+
+    let icon_size_class = match props.size {
+        Size::ExtraSmall => "mm-text-base",
+        Size::Small => "mm-text-base",
+        Size::Medium => "text-xl",
+        Size::Large => "text-xl",
+        Size::ExtraLarge => "text-2xl",
+    };
+
+    let icon_class = classes!(
+        icon_size_class,
+        "mm-inline-block",
+        "mm-justify-center",
+        "mm-items-center",
+        "mm-flex",
     );
 
     if let Some(to) = &props.to {
@@ -175,14 +215,14 @@ where
                 to={ to.clone() }
             >
                 if let Some(icon) = &props.left_icon {
-                    <span class="mm-w-5 mm-min-h-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ icon.clone() }</span>
+                    <span class={icon_class}>{ *icon }</span>
                 }
 
                 { props.text.clone() }
                 { for props.children.iter() }
 
                 if let Some(icon) = &props.right_icon {
-                    { icon.clone() }
+                    { *icon }
                 }
             </Link<T>>
         };
@@ -198,14 +238,14 @@ where
             value={props.value.clone()}
         >
             if let Some(icon) = &props.left_icon {
-                <span class="mm-w-5 mm-min-h-5 mm-inline-block mm-justify-center mm-items-center mm-flex mm-text-xl">{ icon.clone() }</span>
+                <span class={icon_class}>{ *icon }</span>
             }
 
             { props.text.clone() }
             { for props.children.iter() }
 
             if let Some(icon) = &props.right_icon {
-                { icon.clone() }
+                { *icon }
             }
         </button>
     }
