@@ -23,14 +23,18 @@ pub enum TooltipPosition {
 
 #[derive(PartialEq, Properties)]
 pub struct TooltipProps {
+    /// Title of the tooltip
     pub title: AttrValue,
+
+    /// Above which element the tooltip should be shown
     pub children: Html,
 
+    /// Additional classes on top of the tooltip
     #[prop_or_default]
     pub class: Classes,
 
     /// Position of the tooltip
-    ///  default value is `TooltipPosition::Bottom`
+    ///  default value is `TooltipPosition::Right`
     #[prop_or_default]
     pub position: TooltipPosition,
 
@@ -42,10 +46,51 @@ pub struct TooltipProps {
     /// Offset in pixels
     ///  - first value is for x-axis
     ///  - second value is for y-axis
+    /// default is 8px
     #[prop_or(8.0)]
     pub offset: f64,
 }
 
+/// # Tooltip component
+/// Tooltip component is responsible to show a tooltip
+///  on any children element when the user hovers over it.
+///
+/// See [TooltipProps](TooltipProps) for more details.
+///
+/// ## Example (simplest option)
+/// ```rust
+/// use yew::prelude::*;
+/// use ui_common::components::{Tooltip, TooltipPosition};
+///
+/// #[function_component(TooltipExample)]
+/// fn tooltip_example() -> Html {
+///     html! {
+///         <Tooltip title={"Tooltip title"}>
+///             <button>{"Hover me"}</button>
+///         </Tooltip>
+///     }
+/// }
+/// ```
+///
+/// ## Example (rich option)
+/// ```rust
+/// use yew::prelude::*;
+/// use ui_common::components::{Tooltip, TooltipPosition};
+///
+/// #[function_component(TooltipExample)]
+/// fn tooltip_example() -> Html {
+///     html! {
+///         <Tooltip
+///             title={"Tooltip title"}
+///             position={TooltipPosition::Bottom}
+///             arrow={true}
+///             offset={8.0}
+///         >
+///             <button>{"Hover me"}</button>
+///         </Tooltip>
+///     }
+/// }
+/// ```
 #[function_component]
 pub fn Tooltip(
     TooltipProps {
