@@ -1,8 +1,9 @@
+use gloo_utils::window;
 use web_sys::HtmlElement;
 use yew::prelude::*;
 
 // Describes the size of the tooltip arrow (based on the largest side)
-const TOOLTIP_SIZE: f64 = 8.0;
+const TOOLTIP_ARROW_SIZE: f64 = 8.0;
 
 #[derive(Debug, Clone, PartialEq, Default)]
 struct Coordinates {
@@ -63,9 +64,6 @@ pub fn Tooltip(
     let common_tooltip_classes = classes!(
         "mm-custom-tooltip",
         "mm-absolute",
-        "mm-bg-white",
-        "mm-border",
-        "mm-border-gray-300",
         "mm-p-2",
         "mm-z-10",
         "mm-rounded",
@@ -73,6 +71,8 @@ pub fn Tooltip(
         "mm-transition-opacity",
         "mm-max-w-80",
         "mm-text-xs",
+        "mm-text-primary-100",
+        "mm-bg-gray-low-700",
         // Hidden doesn't work because there is no element
         //  and we can't calculate it's width and height
         //  so the values will be `0`, `0` and the position
@@ -90,40 +90,38 @@ pub fn Tooltip(
         "before:mm-h-0",
         "before:mm-border-solid",
         "before:mm-border-l-transparent",
-        "before:mm-border-l-4",
+        "before:mm-border-l-[8px]",
         "before:mm-border-r-transparent",
-        "before:mm-border-r-4",
-        "before:mm-border-b-gray-low-400",
-        format!("before:mm-border-b-[{TOOLTIP_SIZE}px]")
+        "before:mm-border-r-[8px]",
+        "before:mm-border-b-gray-low-700",
+        "before:mm-border-b-[8px]",
+        format!("before:mm-border-b-[{TOOLTIP_ARROW_SIZE}px]")
     );
 
     let specific_arrow_classes = match &position {
-        TooltipPosition::Top => vec![
-            "before:-mm-bottom-2",
-            "before:-mm-left-1/2",
-            "before:-mm-translate-x-1/2",
-            "before:mm-rotate-180",
-        ],
-        TooltipPosition::Bottom => vec![
+        TooltipPosition::Bottom => classes!(
             "before:-mm-top-2",
             "before:mm-left-1/2",
             "before:-mm-translate-x-1/2",
-        ],
-
-        // Has a top centration mismatch
-        TooltipPosition::Right => vec![
-            "before:mm-top-[calc(44%)]",
+        ),
+        TooltipPosition::Right => classes!(
+            "before:mm-top-[calc(50%-3px)]",
             "before:-mm-left-1",
             "before:-mm-translate-x-1/2",
             "before:-mm-rotate-90",
-        ],
-        // Has a top centration mismatch
-        TooltipPosition::Left => vec![
-            "before:mm-top-[calc(44%)]",
-            "before:-mm-right-3",
+        ),
+        TooltipPosition::Top => classes!(
+            "before:-mm-bottom-2",
+            "before:mm-left-1/2",
+            "before:-mm-translate-x-1/2",
+            "before:mm-rotate-180",
+        ),
+        TooltipPosition::Left => classes!(
+            "before:mm-top-[calc(50%-3px)]",
+            "before:-mm-right-[18px]",
             "before:-mm-translate-x-1/2",
             "before:mm-rotate-90",
-        ],
+        ),
     };
 
     let final_classes = classes!(
@@ -141,51 +139,76 @@ pub fn Tooltip(
         let arrow = *arrow;
 
         Callback::from(move |event: MouseEvent| {
+            // HTML element on which the event was triggered
             let html_element = event.target_unchecked_into::<HtmlElement>();
+            let html_element_rect = html_element.get_bounding_client_rect();
 
-            let rect = html_element.get_bounding_client_rect();
+            let tooltip_element = tooltip_ref.cast::<HtmlElement>();
 
-            let res = tooltip_ref.cast::<HtmlElement>();
-
-            if let Some(tooltip_element) = res {
+            if let Some(tooltip_element) = tooltip_element {
                 let tooltip_rect = tooltip_element.get_bounding_client_rect();
 
                 let tooltip_coordinates = match &position {
                     TooltipPosition::Top => {
-                        let top = rect.top() - tooltip_rect.height() - offset;
-                        let top = if arrow { top - TOOLTIP_SIZE } else { top };
+                        // Get `y` coordinate based on `x1, y1` from top-left corner + window scroll
+                        let top = html_element.offset_top() as f64;
+
+                        // Subtract the tooltip height and add an offset
+                        let top = top - tooltip_rect.height() - offset;
+
+                        // If the arrow is enabled, we need to add the arrow size
+                        let top = if arrow { top - TOOLTIP_ARROW_SIZE } else { top };
 
                         Coordinates {
                             top,
-                            left: rect.left() + rect.width() / 2.0 - tooltip_rect.width() / 2.0,
+                            left: html_element_rect.left() + html_element_rect.width() / 2.0
+                                - tooltip_rect.width() / 2.0,
                         }
                     }
                     TooltipPosition::Bottom => {
-                        let top = rect.bottom() + offset;
-                        let top = if arrow { top + TOOLTIP_SIZE } else { top };
+                        // Get `y` coordinate based on `x4, y4` from bottom-left corner + window scroll
+                        let top = html_element_rect.bottom()
+                            + window().scroll_y().expect("Must have window on the page")
+                            + offset;
+
+                        // If the arrow is enabled, we need to add the arrow size
+                        let top = if arrow { top + TOOLTIP_ARROW_SIZE } else { top };
 
                         Coordinates {
                             top,
-                            left: rect.left() + rect.width() / 2.0 - tooltip_rect.width() / 2.0,
+                            left: html_element_rect.left() + html_element_rect.width() / 2.0
+                                - tooltip_rect.width() / 2.0,
                         }
                     }
                     TooltipPosition::Right => {
-                        let left = rect.right() + offset;
-                        let left = if arrow { left + TOOLTIP_SIZE } else { left };
+                        // Get `y` coordinate based on `x1, y1` from top-left corner + window scroll
+                        let top = html_element.offset_top() as f64;
+                        let top =
+                            top + html_element_rect.height() / 2.0 - tooltip_rect.height() / 2.0;
 
-                        Coordinates {
-                            top: rect.top() + rect.height() / 2.0 - tooltip_rect.height() / 2.0,
-                            left,
-                        }
+                        let left = html_element_rect.right() + offset;
+                        let left = if arrow {
+                            left + TOOLTIP_ARROW_SIZE
+                        } else {
+                            left
+                        };
+
+                        Coordinates { top, left }
                     }
                     TooltipPosition::Left => {
-                        let left = rect.left() - tooltip_rect.width() - offset;
-                        let left = if arrow { left - TOOLTIP_SIZE } else { left };
+                        // Get `y` coordinate based on `x1, y1` from top-left corner + window scroll
+                        let top = html_element.offset_top() as f64;
+                        let top =
+                            top + html_element_rect.height() / 2.0 - tooltip_rect.height() / 2.0;
 
-                        Coordinates {
-                            top: rect.top() + rect.height() / 2.0 - tooltip_rect.height() / 2.0,
-                            left,
-                        }
+                        let left = html_element_rect.left() - tooltip_rect.width() - offset;
+                        let left = if arrow {
+                            left - TOOLTIP_ARROW_SIZE
+                        } else {
+                            left
+                        };
+
+                        Coordinates { top, left }
                     }
                 };
 
@@ -207,7 +230,7 @@ pub fn Tooltip(
     });
 
     html! {
-        <span onmouseenter={on_mouse_enter} onmouseleave={on_mouse_leave} class={class.clone()}>
+        <span onmouseenter={on_mouse_enter} onmouseleave={on_mouse_leave} class={classes!(class.clone(), "mm-inline-block")}>
             <div
                 class={final_classes}
                 style={format!("top: {top}px; left: {left}px;", top = coordinates.top, left = coordinates.left)}
