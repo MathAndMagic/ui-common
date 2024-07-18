@@ -698,6 +698,11 @@ video {
   line-height: 2.25rem;
 }
 
+.text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
 .text-gray-low-400 {
   --tw-text-opacity: 1;
   color: rgb(69 69 69 / var(--tw-text-opacity));
@@ -726,6 +731,11 @@ video {
   .dark\:bg-gray-low-900 {
     --tw-bg-opacity: 1;
     background-color: rgb(28 28 28 / var(--tw-bg-opacity));
+  }
+
+  .dark\:text-gray-100 {
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
   }
 
   .dark\:text-gray-high-700 {

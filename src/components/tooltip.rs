@@ -109,15 +109,18 @@ pub fn Tooltip(
     let common_tooltip_classes = classes!(
         "mm-custom-tooltip",
         "mm-absolute",
-        "mm-p-2",
+        "mm-px-3",
+        "mm-py-2",
         "mm-z-10",
         "mm-rounded",
         "mm-shadow-md",
         "mm-transition-opacity",
         "mm-max-w-80",
         "mm-text-xs",
-        "mm-text-primary-100",
-        "mm-bg-gray-low-700",
+        "mm-text-gray-low-800",
+        "dark:mm-text-gray-high-200",
+        "mm-bg-gray-high-200",
+        "dark:mm-bg-gray-low-800",
         // Hidden doesn't work because there is no element
         //  and we can't calculate it's width and height
         //  so the values will be `0`, `0` and the position
@@ -137,9 +140,9 @@ pub fn Tooltip(
         "before:mm-border-l-transparent",
         "before:mm-border-l-[8px]",
         "before:mm-border-r-transparent",
-        "before:mm-border-r-[8px]",
-        "before:mm-border-b-gray-low-700",
-        "before:mm-border-b-[8px]",
+        format!("before:mm-border-r-[{TOOLTIP_ARROW_SIZE}px]"),
+        "before:mm-border-b-gray-high-200",
+        "dark:before:mm-border-b-gray-low-800",
         format!("before:mm-border-b-[{TOOLTIP_ARROW_SIZE}px]")
     );
 

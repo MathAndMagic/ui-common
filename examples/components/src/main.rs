@@ -53,7 +53,7 @@ fn App() -> Html {
                 html! {
                     <Tooltip
                         title={"Button should create the page"}
-                        position={TooltipPosition::Bottom}
+                        position={TooltipPosition::Left}
                     >
                         <Button<Route> size={ButtonSize::Large} left_icon={Some(Icon::PLUS)} text="Create Page" />
                     </Tooltip>
@@ -192,10 +192,10 @@ fn PageContent() -> Html {
 
     html! {
         <>
-            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4">{"Table"}</h2>
+            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Table"}</h2>
             <Table<String, Route> {columns} display_header=true {router} {collection} variant={TableVariant::Classic} cell_class="px-4 py-3 align-middle" />
 
-            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4">{"Tooltips"}</h2>
+            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Tooltips"}</h2>
             <div class="flex flex-row p-2">
                 <div class="basis-1/4">
                     <Tooltip
