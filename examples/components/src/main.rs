@@ -187,7 +187,62 @@ fn PageContent() -> Html {
 
     html! {
         <>
+            <h2 class="mm-text-3xl mm-border-solid mm-border-b-gray-high-800 mm-border-b p-4">{"Table"}</h2>
             <Table<String, Route> {columns} display_header=true {router} {collection} variant={TableVariant::Classic} cell_class="px-4 py-3 align-middle" />
+
+            <h2 class="mm-text-3xl mm-border-solid mm-border-b-gray-high-800 mm-border-b p-4">{"Tooltips"}</h2>
+            <div class="mm-flex mm-flex-row p-2">
+                <div class="mm-basis-1/4">
+                    <Tooltip
+                        title={"Let’s start with a Right placeholder"}
+                        position={TooltipPosition::Right}
+                        arrow={false}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Right tooltip. No arrow"}
+                        />
+                    </Tooltip>
+                </div>
+                <div class="mm-basis-1/4">
+                    <Tooltip
+                        title={"Let’s start with a Bottom placeholder"}
+                        position={TooltipPosition::Bottom}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Bottom placeholder with an arrow"}
+                        />
+                    </Tooltip>
+                </div>
+                <div class="mm-basis-1/4">
+                    <Tooltip
+                        title={"Let’s start with a Left placeholder"}
+                        position={TooltipPosition::Left}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Left tooltip with an arrow"}
+                        />
+                    </Tooltip>
+                </div>
+                <div class="mm-basis-1/4">
+                    <Tooltip
+                        title={"Top tooltip"}
+                        position={TooltipPosition::Top}
+                        arrow={false}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Top tooltip. No arrow"}
+                        />
+                    </Tooltip>
+                </div>
+            </div>
         </>
     }
 }
