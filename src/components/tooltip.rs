@@ -44,9 +44,7 @@ pub struct TooltipProps {
     pub arrow: bool,
 
     /// Offset in pixels
-    ///  - first value is for x-axis
-    ///  - second value is for y-axis
-    /// default is 8px
+    ///  default is 8px
     #[prop_or(8.0)]
     pub offset: f64,
 }
