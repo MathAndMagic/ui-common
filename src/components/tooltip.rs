@@ -3,7 +3,7 @@ use web_sys::HtmlElement;
 use yew::prelude::*;
 
 // Describes the size of the tooltip arrow (based on the largest side)
-const TOOLTIP_ARROW_SIZE: f64 = 8.0;
+const TOOLTIP_ARROW_SIZE: u8 = 8;
 
 #[derive(Debug, Clone, PartialEq, Default)]
 struct Coordinates {
@@ -27,7 +27,7 @@ pub struct TooltipProps {
     pub title: AttrValue,
 
     /// Above which element the tooltip should be shown
-    pub children: Html,
+    pub children: Children,
 
     /// Additional classes on top of the tooltip
     #[prop_or_default]
@@ -45,8 +45,8 @@ pub struct TooltipProps {
 
     /// Offset in pixels
     ///  default is 8px
-    #[prop_or(8.0)]
-    pub offset: f64,
+    #[prop_or(8)]
+    pub offset: u16,
 }
 
 /// # Tooltip component
@@ -82,7 +82,7 @@ pub struct TooltipProps {
 ///             title={"Tooltip title"}
 ///             position={TooltipPosition::Bottom}
 ///             arrow={true}
-///             offset={8.0}
+///             offset={8}
 ///         >
 ///             <button>{"Hover me"}</button>
 ///         </Tooltip>
@@ -189,7 +189,7 @@ pub fn Tooltip(
         let coordinates = coordinates.clone();
         let tooltip_ref = tooltip_ref.clone();
         let position = position.clone();
-        let offset = *offset;
+        let offset = *offset as f64;
         let arrow = *arrow;
 
         Callback::from(move |event: MouseEvent| {
@@ -211,7 +211,11 @@ pub fn Tooltip(
                         let top = top - tooltip_rect.height() - offset;
 
                         // If the arrow is enabled, we need to add the arrow size
-                        let top = if arrow { top - TOOLTIP_ARROW_SIZE } else { top };
+                        let top = if arrow {
+                            top - TOOLTIP_ARROW_SIZE as f64
+                        } else {
+                            top
+                        };
 
                         Coordinates {
                             top,
@@ -226,7 +230,11 @@ pub fn Tooltip(
                             + offset;
 
                         // If the arrow is enabled, we need to add the arrow size
-                        let top = if arrow { top + TOOLTIP_ARROW_SIZE } else { top };
+                        let top = if arrow {
+                            top + TOOLTIP_ARROW_SIZE as f64
+                        } else {
+                            top
+                        };
 
                         Coordinates {
                             top,
@@ -242,7 +250,7 @@ pub fn Tooltip(
 
                         let left = html_element_rect.right() + offset;
                         let left = if arrow {
-                            left + TOOLTIP_ARROW_SIZE
+                            left + TOOLTIP_ARROW_SIZE as f64
                         } else {
                             left
                         };
@@ -257,7 +265,7 @@ pub fn Tooltip(
 
                         let left = html_element_rect.left() - tooltip_rect.width() - offset;
                         let left = if arrow {
-                            left - TOOLTIP_ARROW_SIZE
+                            left - TOOLTIP_ARROW_SIZE as f64
                         } else {
                             left
                         };
@@ -292,7 +300,7 @@ pub fn Tooltip(
             >
                 { title.clone() }
             </div>
-            { children.clone() }
+            { for children.iter() }
         </span>
     }
 }
