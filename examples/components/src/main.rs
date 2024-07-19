@@ -201,7 +201,7 @@ fn PageContent() -> Html {
                     <Tooltip
                         title={"Let’s start with a Right placeholder. But this is also a multiline hint! Let's see how it looks!"}
                         position={TooltipPosition::Right}
-                        arrow={false}
+                        arrow={true}
                     >
                         <Button<Route>
                             color={ButtonColor::Primary}

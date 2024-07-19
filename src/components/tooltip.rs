@@ -3,6 +3,9 @@ use web_sys::HtmlElement;
 use yew::prelude::*;
 
 // Describes the size of the tooltip arrow (based on the largest side)
+// Note: This variable affects the tooltip arrow size in CSS too
+//  so there is no need to change it in CSS. You can change it here
+//  and it will be applied to the CSS automatically
 const TOOLTIP_ARROW_SIZE: u8 = 8;
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -132,14 +135,22 @@ pub fn Tooltip(
     let common_arrow_classes = classes!(
         "before:mm-content-['']",
         "before:mm-absolute",
-        "before:mm-border-[8px]",
+        // Apply arrow size from the CSS variable
+        //  which will be send from our Rust `TOOLTIP_ARROW_SIZE` constant
+        // Note: We use `length` postfix because `border` is an ambiguity type
+        //  and Tailwind CSS doesn know will it be a `width` or `color`
+        //  to fix it we have to provide a `length` postfix to explicitly
+        //  say Tailwind that this variable is a `width` of the border
+        //
+        // @see {@link https://tailwindcss.com/docs/adding-custom-styles#resolving-ambiguities}
+        "before:mm-border-[length:var(--mm-tooltip-arrow-size)]",
     );
 
     let specific_arrow_classes = match &position {
         TooltipPosition::Bottom => classes!(
             "before:mm-bottom-[100%]",
             "before:mm-left-[50%]",
-            "before:-mm-ml-[8px]",
+            "before:-mm-ml-[var(--mm-tooltip-arrow-size)]",
             "before:mm-border-t-transparent",
             "before:mm-border-r-transparent",
             "before:mm-border-b-gray-high-200",
@@ -149,7 +160,7 @@ pub fn Tooltip(
         TooltipPosition::Right => classes!(
             "before:mm-top-[50%]",
             "before:mm-right-[100%]",
-            "before:-mm-mt-[8px]",
+            "before:-mm-mt-[var(--mm-tooltip-arrow-size)]",
             "before:mm-border-t-transparent",
             "before:mm-border-r-gray-high-200",
             "dark:before:mm-border-r-gray-low-800",
@@ -159,7 +170,7 @@ pub fn Tooltip(
         TooltipPosition::Top => classes!(
             "before:mm-top-[100%]",
             "before:mm-left-[50%]",
-            "before:-mm-ml-[8px]",
+            "before:-mm-ml-[var(--mm-tooltip-arrow-size)]",
             "before:mm-border-t-gray-high-200",
             "dark:before:mm-border-t-gray-low-800",
             "before:mm-border-r-transparent",
@@ -169,7 +180,7 @@ pub fn Tooltip(
         TooltipPosition::Left => classes!(
             "before:mm-top-[50%]",
             "before:mm-left-[100%]",
-            "before:-mm-mt-[8px]",
+            "before:-mm-mt-[var(--mm-tooltip-arrow-size)]",
             "before:mm-border-t-transparent",
             "before:mm-border-r-transparent",
             "before:mm-border-b-transparent",
@@ -295,7 +306,14 @@ pub fn Tooltip(
         <span onmouseenter={on_mouse_enter} onmouseleave={on_mouse_leave} class={classes!(class.clone(), "mm-inline-block")}>
             <div
                 class={final_classes}
-                style={format!("top: {top}px; left: {left}px;", top = coordinates.top, left = coordinates.left)}
+                style={
+                    format!(
+                        "top: {top}px; left: {left}px; --mm-tooltip-arrow-size: {size}px;",
+                        top = coordinates.top,
+                        left = coordinates.left,
+                        size = TOOLTIP_ARROW_SIZE
+                    )
+                }
                 ref={tooltip_ref}
             >
                 { title.clone() }
