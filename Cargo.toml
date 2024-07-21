@@ -26,6 +26,7 @@ version = "0.3"
 features = [
   "Document",
   "Element",
+  "DomRect",
   "EventTarget",
   "HtmlAnchorElement",
   "HtmlElement",

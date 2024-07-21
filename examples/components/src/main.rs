@@ -51,7 +51,12 @@ fn App() -> Html {
 
             <PageHeader text="Math and Magic UI components" buttons={vec![
                 html! {
-                    <Button<Route> size={ButtonSize::Large} left_icon={Some(Icon::PLUS)} text="Create Page" />
+                    <Tooltip
+                        title={"Button should create the page"}
+                        position={TooltipPosition::Left}
+                    >
+                        <Button<Route> size={ButtonSize::Large} left_icon={Some(Icon::PLUS)} text="Create Page" />
+                    </Tooltip>
                 },
             ]} />
 
@@ -187,7 +192,64 @@ fn PageContent() -> Html {
 
     html! {
         <>
+            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Table"}</h2>
             <Table<String, Route> {columns} display_header=true {router} {collection} variant={TableVariant::Classic} cell_class="px-4 py-3 align-middle" />
+
+            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Tooltips"}</h2>
+            <div class="flex flex-row p-2">
+                <div class="basis-1/4">
+                    <Tooltip
+                        title={"Let’s start with a Right placeholder. But this is also a multiline hint! Let's see how it looks!"}
+                        position={TooltipPosition::Right}
+                        arrow={true}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Right tooltip. No arrow"}
+                        />
+                    </Tooltip>
+                </div>
+                <div class="basis-1/4">
+                    <Tooltip
+                        title={"Let’s start with a Bottom placeholder. Also it's a multiline title so let's take a look how it looks like!"}
+                        position={TooltipPosition::Bottom}
+                        arrow={true}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Bottom placeholder with an arrow"}
+                        />
+                    </Tooltip>
+                </div>
+                <div class="basis-1/4">
+                    <Tooltip
+                        title={"Let’s start with a Left placeholder"}
+                        position={TooltipPosition::Left}
+                        arrow={true}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Left tooltip with an arrow"}
+                        />
+                    </Tooltip>
+                </div>
+                <div class="basis-1/4">
+                    <Tooltip
+                        title={"Top tooltip"}
+                        position={TooltipPosition::Top}
+                        arrow={false}
+                    >
+                        <Button<Route>
+                            color={ButtonColor::Primary}
+                            variant={ButtonVariant::Solid}
+                            text={"Top tooltip. No arrow"}
+                        />
+                    </Tooltip>
+                </div>
+            </div>
         </>
     }
 }

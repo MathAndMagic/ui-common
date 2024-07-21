@@ -7,6 +7,7 @@ mod input;
 mod nav_link;
 mod page_header;
 mod table;
+mod tooltip;
 
 pub use avatar::{
     Avatar, ConnectionStatus as AvatarConnectionStatus, Size as AvatarSize,
@@ -26,3 +27,4 @@ pub use table::{
     CellRenderer as TableCellRenderer, Column as TableColumn, RowRouter as TableCellRouter, Table,
     Variant as TableVariant,
 };
+pub use tooltip::{Tooltip, TooltipPosition, TooltipProps};
