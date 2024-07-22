@@ -81,7 +81,7 @@ pub struct ModalBodyProps {
 
 #[function_component]
 pub fn ModalBody(props: &ModalBodyProps) -> Html {
-    let context = use_context::<ModalContext>().expect("ModalTitle must be used inside a Modal");
+    let context = use_context::<ModalContext>().expect("ModalBody must be used inside a Modal");
     let ModalBodyProps { children } = props;
     let node = use_node_ref();
 
