@@ -167,6 +167,40 @@ struct ModalContext {
     pub variant: ModalVariant,
 }
 
+/// # Modal component
+/// Is responsible for displaying a modal dialog
+///  on top of the current page.
+///
+/// See [ModalProps](ModalProps) for the properties of this component.
+///
+/// ## Example (simplest option)
+/// ```rust
+/// use yew::prelude::*;
+/// use ui_common::components::{Modal, ModalTitle, ModalBody, ModalActions};
+///
+/// #[function_component(TooltipExample)]
+/// fn tooltip_example() -> Html {
+///     let state = use_state(|| false);
+///     let on_close = use_callback((), {
+///         let state = state.clone();
+///
+///         move |_event, _| {
+///             state.set(false);
+///         }
+///     });
+///
+///     html! {
+///         <Modal open={*state} on_close={&on_close}>
+///             <ModalTitle>{"Modal Title"}</ModalTitle>
+///             <ModalBody>{"Modal Body"}</ModalBody>
+///             <ModalActions>
+///                 <button>{"Close"}</button>
+///                 <button>{"Action"}</button>
+///             </ModalActions>
+///         </Modal>
+///     }
+/// }
+/// ```
 #[function_component]
 pub fn Modal(
     ModalProps {
