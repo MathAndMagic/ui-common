@@ -172,8 +172,8 @@ where
     };
 
     let width_class = match props.width {
-        Width::Auto => "mm-w-auto",
-        Width::Full => "mm-w-full",
+        Width::Auto => classes!("mm-w-auto"),
+        Width::Full => classes!("mm-w-full", "mm-justify-center"),
     };
 
     let class = classes!(

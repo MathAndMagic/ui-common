@@ -1,4 +1,3 @@
-use ui_common::components::Header;
 use uuid::Uuid;
 use yew::prelude::*;
 
@@ -181,6 +180,22 @@ fn PageContent() -> Html {
         },
     ];
 
+    let modal = use_state(|| false);
+    let toggle_modal = use_callback(*modal, {
+        let modal = modal.clone();
+
+        move |_event, _| {
+            modal.set(!*modal);
+        }
+    });
+    let on_close = use_callback((), {
+        let modal = modal.clone();
+
+        move |_event, _| {
+            modal.set(false);
+        }
+    });
+
     let collection = vec![
         "Hello".to_string(),
         "World".to_string(),
@@ -248,6 +263,73 @@ fn PageContent() -> Html {
                             text={"Top tooltip. No arrow"}
                         />
                     </Tooltip>
+                </div>
+            </div>
+
+            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Modal"}</h2>
+            <Modal
+                open={*modal}
+                on_close={&on_close}
+                variant={ModalVariant::Center}
+            >
+                <ModalTitle>{"Approval policy"}</ModalTitle>
+                <ModalBody>
+                    <p class="text-lg font-bold">{"Purpose"}</p>
+                    <p>{"The purpose of this Approval Policy is to establish clear guidelines and procedures for obtaining necessary approvals within [Client Name]. This policy ensures that all decisions are made consistently, transparently, and in alignment with the organization's goals, values, and regulatory requirements."}</p>
+
+                    <p class="text-lg font-bold">{"Scope"}</p>
+                    <p>{"This policy applies to all employees, contractors, and stakeholders involved in the decision-making process at [Client Name]. It covers approvals for financial transactions, project initiatives, procurement activities, hiring processes, and any other actions that require formal authorization."}</p>
+
+                    <p class="text-lg font-bold">{"Policy Statement"}</p>
+                    <p>{"It is the policy of [Client Name] that all activities requiring approval must adhere to the procedures outlined in this document. Approvals must be obtained before initiating the activity, and documentation of the approval must be maintained for auditing and accountability purposes."}</p>
+
+                    <p class="text-lg font-bold">{"Approval Authority Levels"}</p>
+                    <ul class="list-decimal px-6">
+                        <li>{"Board of Directors: Responsible for approving major strategic decisions, large-scale financial expenditures, mergers and acquisitions, and other high-impact actions."}</li>
+                        <li>{"Executive Management: Authorized to approve departmental budgets, significant project proposals, and high-level personnel changes."}</li>
+                        <li>{"Department Heads: Can approve routine operational expenses, minor project initiatives, and regular staffing decisions within their respective departments."}</li>
+                        <li>{"Project Managers: Responsible for approving day-to-day project expenses, minor project changes, and team-specific activities within the scope of their projects."}</li>
+                    </ul>
+                </ModalBody>
+                <ModalActions>
+                    <Button<Route>
+                        color={ButtonColor::Blind}
+                        variant={ButtonVariant::Outline}
+                        width={ButtonWidth::Full}
+                        size={ButtonSize::Large}
+                        text={"Close"}
+                        onclick={{
+                            let on_close = on_close.clone();
+
+                            move |_| {
+                                on_close.emit(());
+                            }
+                        }}
+                    />
+                    <Button<Route>
+                        color={ButtonColor::Primary}
+                        variant={ButtonVariant::Solid}
+                        width={ButtonWidth::Full}
+                        text={"Approve"}
+                        size={ButtonSize::Large}
+                        onclick={{
+                            let on_close = on_close.clone();
+
+                            move |_| {
+                                on_close.emit(());
+                            }
+                        }}
+                    />
+                </ModalActions>
+            </Modal>
+            <div class="flex flex-row p-2">
+                <div class="basis-1/4">
+                    <Button<Route>
+                        color={ButtonColor::Primary}
+                        variant={ButtonVariant::Solid}
+                        text={"Open modal"}
+                        onclick={&toggle_modal}
+                    />
                 </div>
             </div>
         </>
