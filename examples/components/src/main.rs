@@ -374,6 +374,8 @@ fn PageContent() -> Html {
                 anchor_ref={(*dropdown_element).clone()}
                 on_close={&handle_close_dropdown}
             >
+                <Input placeholder={"Some placeholder text"} class="my-2" />
+                <div class="border my-2 border-gray-high-400 dark:border-gray-low-900"></div>
                 <DropdownItem>
                     <DropdownItemIcon>
                         {Icon::ANDROID_LOGO}

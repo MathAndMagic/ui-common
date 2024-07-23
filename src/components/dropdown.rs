@@ -62,6 +62,59 @@ pub struct DropdownProps {
     pub children: Children,
 }
 
+/// `Dropdown` component
+/// Is responsible for displaying a dropdown menu
+///  above `anchor_ref` element
+///
+/// See [DropdownProps](DropdownProps) for the properties of this component.
+///
+/// ## Example
+/// ```rust
+/// use yew::prelude::*;
+/// use web_sys::HtmlElement;
+/// use ui_common::components::{Dropdown, DropdownItem, DropdownItemText, DropdownItemIcon};
+///
+/// #[function_component]
+/// fn DropdownExample() -> Html {
+///     let dropdown_element = use_state(|| None);
+///     let dropdown_bind = {
+///         let dropdown_element = dropdown_element.clone();
+///
+///         Callback::from(move |event: MouseEvent| {
+///             if (*dropdown_element).is_some() {
+///                 dropdown_element.set(None);
+///
+///                 return;
+///             }
+///
+///             let target = event.target_unchecked_into::<HtmlElement>();
+///
+///             dropdown_element.set(Some(target));
+///         })
+///     };
+///     let handle_close_dropdown = {
+///         let dropdown_element = dropdown_element.clone();
+///
+///         Callback::from(move |_| {
+///             dropdown_element.set(None);
+///         })
+///     };
+///     let dropdown_open = dropdown_element.is_some();
+///
+///     html! {
+///         <div>
+///             <button onclick={&dropdown_bind}>{"Some button"}</button>
+///             <Dropdown
+///                 open={dropdown_open}
+///                 anchor_ref={(*dropdown_element).clone()}
+///                 on_close={&handle_close_dropdown}
+///             >
+///                 <div>{"Any markup"}</div>
+///             </Dropdown>
+///         </div>
+///     }
+/// }
+/// ```
 #[function_component]
 pub fn Dropdown(
     DropdownProps {
