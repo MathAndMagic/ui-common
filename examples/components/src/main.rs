@@ -1,4 +1,5 @@
 use uuid::Uuid;
+use web_sys::HtmlElement;
 use yew::prelude::*;
 
 use ui_common::{components::*, Icon};
@@ -205,6 +206,31 @@ fn PageContent() -> Html {
 
     let router = Some(TableCellRouter::new(|_| Route::Math));
 
+    let dropdown_element = use_state(|| None);
+    let dropdown_bind = {
+        let dropdown_element = dropdown_element.clone();
+
+        Callback::from(move |event: MouseEvent| {
+            if (*dropdown_element).is_some() {
+                dropdown_element.set(None);
+
+                return;
+            }
+
+            let target = event.target_unchecked_into::<HtmlElement>();
+
+            dropdown_element.set(Some(target));
+        })
+    };
+    let handle_close_dropdown = {
+        let dropdown_element = dropdown_element.clone();
+
+        Callback::from(move |_| {
+            dropdown_element.set(None);
+        })
+    };
+    let dropdown_open = dropdown_element.is_some();
+
     html! {
         <>
             <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Table"}</h2>
@@ -332,6 +358,48 @@ fn PageContent() -> Html {
                     />
                 </div>
             </div>
+
+            <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Dropdown"}</h2>
+            <button
+                class="m-4 bg-white hover:bg-slate-400 hover:text-white py-3 px-5 rounded text-gray-600 shadow-md"
+                onclick={&dropdown_bind}
+            >
+                {"Dropdown"}
+            </button>
+            <Dropdown
+                open={dropdown_open}
+                anchor_ref={(*dropdown_element).clone()}
+                on_close={&handle_close_dropdown}
+            >
+                <DropdownItem>
+                    <DropdownItemIcon>
+                        {Icon::ANDROID_LOGO}
+                    </DropdownItemIcon>
+                    <DropdownItemText>{"Android"}</DropdownItemText>
+                    <DropdownItemIcon>
+                        {Icon::ARROW_CIRCLE_RIGHT}
+                    </DropdownItemIcon>
+                </DropdownItem>
+                <DropdownItem>
+                    <DropdownItemIcon>
+                        {Icon::ALIEN}
+                    </DropdownItemIcon>
+                    <DropdownItemText>{"Alien"}</DropdownItemText>
+                    <DropdownItemIcon>
+                        {Icon::ARROW_CIRCLE_RIGHT}
+                    </DropdownItemIcon>
+                </DropdownItem>
+                <div class="border my-2 border-gray-high-400"></div>
+                <DropdownItem>
+                    <DropdownItemText>{"Some additional info without icons"}</DropdownItemText>
+                </DropdownItem>
+                <DropdownItem>
+                    <DropdownItemText>{"Some additional info with icon at the end and at the same time this is realy long text"}</DropdownItemText>
+                    <DropdownItemIcon>
+                        {Icon::ARROW_FAT_LINE_UP}
+                    </DropdownItemIcon>
+                </DropdownItem>
+            </Dropdown>
         </>
     }
 }
