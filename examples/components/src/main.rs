@@ -360,12 +360,15 @@ fn PageContent() -> Html {
             </div>
 
             <h2 class="text-3xl border-solid border-b-gray-high-800 border-b p-4 text-gray-900 dark:text-gray-100">{"Dropdown"}</h2>
-            <button
-                class="m-4 bg-white hover:bg-slate-400 hover:text-white py-3 px-5 rounded text-gray-600 shadow-md"
+            <Button<Route>
+                color={ButtonColor::Secondary}
+                variant={ButtonVariant::Solid}
+                size={ButtonSize::ExtraLarge}
+                text={"Dropdown"}
                 onclick={&dropdown_bind}
-            >
-                {"Dropdown"}
-            </button>
+                class="m-2"
+            />
+
             <Dropdown
                 open={dropdown_open}
                 anchor_ref={(*dropdown_element).clone()}
@@ -389,7 +392,7 @@ fn PageContent() -> Html {
                         {Icon::ARROW_CIRCLE_RIGHT}
                     </DropdownItemIcon>
                 </DropdownItem>
-                <div class="border my-2 border-gray-high-400"></div>
+                <div class="border my-2 border-gray-high-400 dark:border-gray-low-900"></div>
                 <DropdownItem>
                     <DropdownItemText>{"Some additional info without icons"}</DropdownItemText>
                 </DropdownItem>
