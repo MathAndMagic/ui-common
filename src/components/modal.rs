@@ -222,7 +222,7 @@ pub fn Modal(
         ModalVariant::Center => classes!(
             "mm-rounded-lg",
             "mm-w-[calc(100%-24px)]",
-            "mm-max-w-md",
+            "mm-max-w-2xl",
             "mm-max-h-[calc(100vh-16px)]",
             "mm-mt-4",
             "mm-items-center"

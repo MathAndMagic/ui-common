@@ -1,5 +1,6 @@
 mod avatar;
 mod button;
+mod dropdown;
 mod footer;
 mod header;
 mod heading;
@@ -18,6 +19,7 @@ pub use button::{
     Button, Color as ButtonColor, Round as ButtonRound, Size as ButtonSize,
     Variant as ButtonVariant, Width as ButtonWidth,
 };
+pub use dropdown::{Dropdown, DropdownItem, DropdownItemIcon, DropdownItemText, DropdownProps};
 pub use footer::Footer;
 pub use header::Header;
 pub use heading::{Heading, Level as HeadingLevel};
