@@ -126,7 +126,7 @@ pub struct ModalActionsProps {
 
 #[function_component]
 pub fn ModalActions(props: &ModalActionsProps) -> Html {
-    let context = use_context::<ModalContext>().expect("ModalTitle must be used inside a Modal");
+    let context = use_context::<ModalContext>().expect("ModalActions must be used inside a Modal");
     let ModalActionsProps { children } = props;
 
     let classes = match &context.variant {
@@ -304,7 +304,7 @@ pub fn Modal(
                 let classes_to_add = Array::new_with_length(1);
                 classes_to_add.set(0, "mm-overflow-hidden".into());
 
-                classes.add(&classes_to_add).expect("Class must be removed");
+                classes.add(&classes_to_add).expect("Class must be added");
             } else {
                 let classes = body().class_list();
                 let classes_to_remove = Array::new_with_length(1);
